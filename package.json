@@ -1,0 +1,27 @@
+{
+  "name": "oop-exercises",
+  "version": "1.0.0",
+  "description": "オブジェクト指向エクササイズ",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:BcRikko/oop-exercises.git"
+  },
+  "keywords": [
+    "Object Orientation Programming"
+  ],
+  "author": "BcRikko",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^23.1.4",
+    "jest": "^23.3.0",
+    "ts-jest": "^23.0.0",
+    "tslint": "^5.10.0",
+    "tslint-config-standard": "^7.1.0",
+    "typescript": "^2.9.2"
+  }
+}
