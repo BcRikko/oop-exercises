@@ -1,16 +1,26 @@
 import { Drink } from './drink'
+import { Stock } from './stock'
+import { Coin, DrinkType } from './type'
 
 export class VendingMachine {
   /** コーラの在庫数 */
-  quantityOfCoke = 5
+  stockOfCoke: Stock
   /** ダイエットコーラの在庫数 */
-  quantityOfDietCoke = 5
+  stockOfDietCoke: Stock
   /** お茶の在庫数 */
-  quantityOfTea = 5
-  /** 100円玉の在庫数 */
-  numberOf100Yen = 10
+  stockOfTea: Stock
+  /** 硬貨の在庫数 */
+  numberOfCoin: Coin[]
   /** お釣り */
-  charge = 0
+  charge: Coin[]
+
+  constructor () {
+    this.stockOfCoke = new Stock(5)
+    this.stockOfDietCoke = new Stock(5)
+    this.stockOfTea = new Stock(5)
+    this.numberOfCoin = Array(5).fill(null).map(_ => Coin.OneHundred)
+    this.charge = []
+  }
 
   /**
    * ジュースを購入する
@@ -18,46 +28,51 @@ export class VendingMachine {
    * @param kindOfDrink ジュースの種類
    * @return 指定したジュース.在庫不足、釣り銭不足で変えなかった場合はnullが返される
    */
-  buy (i: number, kindOfDrink: number): Drink {
+  buy (i: Coin, kindOfDrink: DrinkType): Drink {
     // 100円と500円だけ受け取る
-    if ((i !== 100) && (i !== 500)) {
-      this.charge += i
+    if ((i !== Coin.OneHundred) && (i !== Coin.FiveHundred)) {
+      this.charge.push(i)
       return null
     }
 
-    if ((kindOfDrink === Drink.COKE) && (this.quantityOfCoke === 0)) {
-      this.charge += i
+    if ((kindOfDrink === DrinkType.Coke) && (this.stockOfCoke.quantity === 0)) {
+      this.charge.push(i)
       return null
-    } else if ((kindOfDrink === Drink.DIET_COKE) && (this.quantityOfDietCoke === 0)) {
-      this.charge += i
+    } else if ((kindOfDrink === DrinkType.DietCoke) && (this.stockOfDietCoke.quantity === 0)) {
+      this.charge.push(i)
       return null
-    } else if ((kindOfDrink === Drink.TEA) && (this.quantityOfTea === 0)) {
-      this.charge += i
+    } else if ((kindOfDrink === DrinkType.Tea) && (this.stockOfTea.quantity === 0)) {
+      this.charge.push(i)
       return null
     }
 
     // 釣り銭不足
-    if (i === 500 && this.numberOf100Yen < 4) {
-      this.charge += i
+    if (i === Coin.FiveHundred && this.numberOfCoin.filter(a => a === Coin.OneHundred).length < 4) {
+      this.charge.push(i)
       return null
     }
 
-    if (i === 100) {
+    if (i === Coin.OneHundred) {
       // 100円玉を釣り銭に使える
-      this.numberOf100Yen++
-    } else if (i === 500) {
+      this.numberOfCoin.push(i)
+    } else if (i === Coin.FiveHundred) {
       // 400円のお釣り
-      this.charge += i - 100
       // 100円玉を釣り銭に使える
-      this.numberOf100Yen -= (i - 100) / 100
+      this.numberOfCoin.push(i)
+
+      for (let j = 0; j < (i - Coin.OneHundred) / Coin.OneHundred; j++) {
+        this.charge.push(Coin.OneHundred)
+        const coinIndex = this.numberOfCoin.findIndex(a => a === Coin.OneHundred)
+        this.numberOfCoin.splice(coinIndex, 1)
+      }
     }
 
-    if (kindOfDrink === Drink.COKE) {
-      this.quantityOfCoke--
-    } else if (kindOfDrink === Drink.DIET_COKE) {
-      this.quantityOfDietCoke--
+    if (kindOfDrink === DrinkType.Coke) {
+      this.stockOfCoke.decreace()
+    } else if (kindOfDrink === DrinkType.DietCoke) {
+      this.stockOfDietCoke.decreace()
     } else {
-      this.quantityOfTea--
+      this.stockOfTea.decreace()
     }
 
     return new Drink(kindOfDrink)
@@ -68,8 +83,8 @@ export class VendingMachine {
    * @return お釣りの金額
    */
   refund (): number {
-    const result = this.charge
-    this.charge = 0
+    const result = this.charge.reduce((sum, c) => sum + c, 0)
+    this.charge = []
     return result
   }
 }

@@ -1,15 +1,13 @@
+import { DrinkType } from './type'
+
 export class Drink {
-  static readonly COKE = 0
-  static readonly DIET_COKE = 1
-  static readonly TEA = 2
+  private kind: DrinkType
 
-  private kind: number
-
-  constructor (kind: number) {
+  constructor (kind: DrinkType) {
     this.kind = kind
   }
 
-  getKind (): number {
+  getKind (): DrinkType {
     return this.kind
   }
 }
