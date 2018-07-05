@@ -1,6 +1,7 @@
 import { Drink } from './drink'
 import { Stock } from './stock'
 import { Coin, DrinkType } from './type'
+import { CoinStock, Charge } from './collection'
 
 export class VendingMachine {
   /** コーラの在庫数 */
@@ -10,16 +11,16 @@ export class VendingMachine {
   /** お茶の在庫数 */
   stockOfTea: Stock
   /** 硬貨の在庫数 */
-  numberOfCoin: Coin[]
+  coinStock: CoinStock
   /** お釣り */
-  charge: Coin[]
+  charge: Charge
 
   constructor () {
     this.stockOfCoke = new Stock(5)
     this.stockOfDietCoke = new Stock(5)
     this.stockOfTea = new Stock(5)
-    this.numberOfCoin = Array(5).fill(null).map(_ => Coin.OneHundred)
-    this.charge = []
+    this.coinStock = new CoinStock([ { coin: Coin.OneHundred, numberOfCoin: 5 } ])
+    this.charge = new Charge()
   }
 
   /**
@@ -47,23 +48,22 @@ export class VendingMachine {
     }
 
     // 釣り銭不足
-    if (payment === Coin.FiveHundred && this.numberOfCoin.filter(a => a === Coin.OneHundred).length < 4) {
+    if (payment === Coin.FiveHundred && this.coinStock.size(Coin.OneHundred) < 4) {
       this.charge.push(payment)
       return null
     }
 
     if (payment === Coin.OneHundred) {
       // 100円玉を釣り銭に使える
-      this.numberOfCoin.push(payment)
+      this.coinStock.push(payment)
     } else if (payment === Coin.FiveHundred) {
       // 400円のお釣り
       // 100円玉を釣り銭に使える
-      this.numberOfCoin.push(payment)
+      this.coinStock.push(payment)
 
       for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
         this.charge.push(Coin.OneHundred)
-        const coinIndex = this.numberOfCoin.findIndex(a => a === Coin.OneHundred)
-        this.numberOfCoin.splice(coinIndex, 1)
+        this.coinStock.pop(Coin.OneHundred)
       }
     }
 
@@ -83,8 +83,6 @@ export class VendingMachine {
    * @return お釣りの金額
    */
   refund (): number {
-    const result = this.charge.reduce((sum, c) => sum + c, 0)
-    this.charge = []
-    return result
+    return this.charge.refundTotal()
   }
 }
