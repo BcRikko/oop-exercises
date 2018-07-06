@@ -1,12 +1,23 @@
 import { Drink } from './drink'
+import { DrinkType } from './type'
 
-test('getKindはコンストラクタに渡した値が取得できること', () => {
-  const coke = new Drink(0)
-  expect(coke.getKind()).toBe(0)
+test('最初に指定したドリンクがCokeのときtrueになる', () => {
+  const drink = new Drink(DrinkType.Coke)
+  expect(drink.isCoke()).toBeTruthy()
+  expect(drink.isDietCoke()).toBeFalsy()
+  expect(drink.isTea()).toBeFalsy()
+})
 
-  const dietCoke = new Drink(1)
-  expect(dietCoke.getKind()).toBe(1)
+test('最初に指定したドリンクがDietCokeのときtrueになる', () => {
+  const drink = new Drink(DrinkType.DietCoke)
+  expect(drink.isCoke()).toBeFalsy()
+  expect(drink.isDietCoke()).toBeTruthy()
+  expect(drink.isTea()).toBeFalsy()
+})
 
-  const tea = new Drink(2)
-  expect(tea.getKind()).toBe(2)
+test('最初に指定したドリンクがTeaのときtrueになる', () => {
+  const drink = new Drink(DrinkType.Tea)
+  expect(drink.isCoke()).toBeFalsy()
+  expect(drink.isDietCoke()).toBeFalsy()
+  expect(drink.isTea()).toBeTruthy()
 })

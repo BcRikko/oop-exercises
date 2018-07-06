@@ -83,6 +83,8 @@ export class VendingMachine {
    * @return お釣りの金額
    */
   refund (): number {
-    return this.charge.refundTotal()
+    const total = this.charge.toTotal()
+    this.charge.refund()
+    return total
   }
 }

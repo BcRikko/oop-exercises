@@ -7,7 +7,15 @@ export class Drink {
     this.kind = kind
   }
 
-  getKind (): DrinkType {
-    return this.kind
+  isCoke (): boolean {
+    return this.kind === DrinkType.Coke
+  }
+
+  isDietCoke (): boolean {
+    return this.kind === DrinkType.DietCoke
+  }
+
+  isTea (): boolean {
+    return this.kind === DrinkType.Tea
   }
 }

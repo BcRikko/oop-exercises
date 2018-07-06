@@ -13,10 +13,8 @@ export class Charge {
     return coins
   }
 
-  refundTotal (): number {
-    const total = this.charge.reduce((total, a) => total + a, 0)
-    this.clear()
-    return total
+  toTotal (): number {
+    return this.charge.reduce((total, a) => total + a, 0)
   }
 
   private clear (): void {
