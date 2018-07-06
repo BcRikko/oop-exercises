@@ -1,4 +1,4 @@
-import { CoinStock } from './coin'
+import { CoinStock } from './coin-stock'
 import { Coin } from '../type'
 
 test('硬貨の初期在庫を設定できること', () => {
@@ -54,4 +54,17 @@ test('投入した硬貨を排出できること', () => {
   }
   expect(stock.pop(Coin.FiveHundred)).toBeNull()
   expect(stock.size(Coin.FiveHundred)).toBe(0)
+})
+
+test('釣り銭不足の場合はfalseになること', () => {
+  const stock = new CoinStock()
+
+  for (let i = 0; i < 4; i++) {
+    stock.push(Coin.OneHundred)
+  }
+
+  expect(stock.haveChange(Coin.FiveHundred)).toBeTruthy()
+
+  stock.pop(Coin.OneHundred)
+  expect(stock.haveChange(Coin.FiveHundred)).toBeFalsy()
 })

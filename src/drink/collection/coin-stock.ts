@@ -32,4 +32,12 @@ export class CoinStock {
   size (coin: Coin): number {
     return this.coins.filter(a => a === coin).length
   }
+
+  haveChange (coin: Coin): boolean {
+    if (coin <= Coin.OneHundred) {
+      return true
+    }
+
+    return this.size(Coin.OneHundred) >= (coin - Coin.OneHundred) / Coin.OneHundred
+  }
 }

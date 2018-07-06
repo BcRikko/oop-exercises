@@ -36,19 +36,19 @@ export class VendingMachine {
       return null
     }
 
-    if ((kindOfDrink === DrinkType.Coke) && (this.stockOfCoke.quantity === 0)) {
+    if ((kindOfDrink === DrinkType.Coke) && (this.stockOfCoke.isEmpty())) {
       this.charge.push(payment)
       return null
-    } else if ((kindOfDrink === DrinkType.DietCoke) && (this.stockOfDietCoke.quantity === 0)) {
+    } else if ((kindOfDrink === DrinkType.DietCoke) && (this.stockOfDietCoke.isEmpty())) {
       this.charge.push(payment)
       return null
-    } else if ((kindOfDrink === DrinkType.Tea) && (this.stockOfTea.quantity === 0)) {
+    } else if ((kindOfDrink === DrinkType.Tea) && (this.stockOfTea.isEmpty())) {
       this.charge.push(payment)
       return null
     }
 
     // 釣り銭不足
-    if (payment === Coin.FiveHundred && this.coinStock.size(Coin.OneHundred) < 4) {
+    if (payment === Coin.FiveHundred && !this.coinStock.haveChange(Coin.FiveHundred)) {
       this.charge.push(payment)
       return null
     }

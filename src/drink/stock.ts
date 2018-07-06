@@ -1,15 +1,15 @@
 export class Stock {
-  private _quantity: number
+  private quantity: number
 
   constructor (quantity: number) {
-    this._quantity = quantity
-  }
-
-  get quantity (): number {
-    return this._quantity
+    this.quantity = quantity
   }
 
   decreace (): void {
-    this._quantity--
+    this.quantity--
+  }
+
+  isEmpty (): boolean {
+    return this.quantity === 0
   }
 }
