@@ -12,7 +12,11 @@ export class DrinkStorage {
   }
 
   isEmpty (kindOfDrink: DrinkType): boolean {
-    return this.stocks.get(kindOfDrink).isEmpty()
+    return this.findStock(kindOfDrink).isEmpty()
+  }
+
+  findStock (kindOfDrink: DrinkType): Stock {
+    return this.stocks.get(kindOfDrink)
   }
 
   decrease (kindOfDrink: DrinkType): void {

@@ -34,7 +34,7 @@ export class VendingMachine {
     }
 
     // 釣り銭不足
-    if (payment === Coin.FiveHundred && !this.coinMech.haveChange(Coin.FiveHundred)) {
+    if (!this.coinMech.haveChange(Coin.FiveHundred)) {
       this.coinMech.putInCoin(payment)
       return null
     }
