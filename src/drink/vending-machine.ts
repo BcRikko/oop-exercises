@@ -2,25 +2,16 @@ import { Drink } from './drink'
 import { Stock } from './stock'
 import { Coin, DrinkType } from './type'
 import { CoinStock, Charge } from './collection'
+import { DrinkStorage } from './storage'
+import { CoinMech } from './coin-mech'
 
 export class VendingMachine {
-  /** コーラの在庫数 */
-  stockOfCoke: Stock
-  /** ダイエットコーラの在庫数 */
-  stockOfDietCoke: Stock
-  /** お茶の在庫数 */
-  stockOfTea: Stock
-  /** 硬貨の在庫数 */
-  coinStock: CoinStock
-  /** お釣り */
-  charge: Charge
+  private stocks: DrinkStorage
+  private coinMech: CoinMech
 
   constructor () {
-    this.stockOfCoke = new Stock(5)
-    this.stockOfDietCoke = new Stock(5)
-    this.stockOfTea = new Stock(5)
-    this.coinStock = new CoinStock([ { coin: Coin.OneHundred, numberOfCoin: 5 } ])
-    this.charge = new Charge()
+    this.stocks = new DrinkStorage()
+    this.coinMech = new CoinMech()
   }
 
   /**
@@ -32,47 +23,46 @@ export class VendingMachine {
   buy (payment: Coin, kindOfDrink: DrinkType): Drink {
     // 100円と500円だけ受け取る
     if ((payment !== Coin.OneHundred) && (payment !== Coin.FiveHundred)) {
-      this.charge.push(payment)
+      this.coinMech.putInCoin(payment)
       return null
     }
 
-    if ((kindOfDrink === DrinkType.Coke) && (this.stockOfCoke.isEmpty())) {
-      this.charge.push(payment)
+    if ((kindOfDrink === DrinkType.Coke) && this.stocks.isEmpty(DrinkType.Coke)) {
+      this.coinMech.putInCoin(payment)
       return null
-    } else if ((kindOfDrink === DrinkType.DietCoke) && (this.stockOfDietCoke.isEmpty())) {
-      this.charge.push(payment)
+    } else if ((kindOfDrink === DrinkType.DietCoke) && this.stocks.isEmpty(DrinkType.DietCoke)) {
+      this.coinMech.putInCoin(payment)
       return null
-    } else if ((kindOfDrink === DrinkType.Tea) && (this.stockOfTea.isEmpty())) {
-      this.charge.push(payment)
+    } else if ((kindOfDrink === DrinkType.Tea) && this.stocks.isEmpty(DrinkType.Tea)) {
+      this.coinMech.putInCoin(payment)
       return null
     }
 
     // 釣り銭不足
-    if (payment === Coin.FiveHundred && !this.coinStock.haveChange(Coin.FiveHundred)) {
-      this.charge.push(payment)
+    if (payment === Coin.FiveHundred && !this.coinMech.haveChange(Coin.FiveHundred)) {
+      this.coinMech.putInCoin(payment)
       return null
     }
 
     if (payment === Coin.OneHundred) {
       // 100円玉を釣り銭に使える
-      this.coinStock.push(payment)
+      this.coinMech.putIntoCoinStock(payment)
     } else if (payment === Coin.FiveHundred) {
       // 400円のお釣り
       // 100円玉を釣り銭に使える
-      this.coinStock.push(payment)
+      this.coinMech.putIntoCoinStock(payment)
 
       for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
-        this.charge.push(Coin.OneHundred)
-        this.coinStock.pop(Coin.OneHundred)
+        this.coinMech.exchangePaymentForChange(Coin.OneHundred)
       }
     }
 
     if (kindOfDrink === DrinkType.Coke) {
-      this.stockOfCoke.decreace()
+      this.stocks.decrease(DrinkType.Coke)
     } else if (kindOfDrink === DrinkType.DietCoke) {
-      this.stockOfDietCoke.decreace()
+      this.stocks.decrease(DrinkType.DietCoke)
     } else {
-      this.stockOfTea.decreace()
+      this.stocks.decrease(DrinkType.Tea)
     }
 
     return new Drink(kindOfDrink)
@@ -83,8 +73,8 @@ export class VendingMachine {
    * @return お釣りの金額
    */
   refund (): number {
-    const total = this.charge.toTotal()
-    this.charge.refund()
+    const total = this.coinMech.toChargeTotal()
+    this.coinMech.refund()
     return total
   }
 }

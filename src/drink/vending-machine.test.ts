@@ -17,19 +17,14 @@ test('100円玉、500円玉以外では購入できず、そのままお釣り�
 test('在庫が0になったら購入できなくなること', () => {
   const vm = new VendingMachine()
 
-  while (!vm.stockOfCoke.isEmpty()) {
+  for (let i = 0; i < 5; i++) {
     vm.buy(Coin.OneHundred, DrinkType.Coke)
-  }
-  expect(vm.buy(Coin.OneHundred, DrinkType.Coke)).toBeNull()
-
-  while (!vm.stockOfDietCoke.isEmpty()) {
     vm.buy(Coin.OneHundred, DrinkType.DietCoke)
-  }
-  expect(vm.buy(Coin.OneHundred, DrinkType.DietCoke)).toBeNull()
-
-  while (!vm.stockOfTea.isEmpty()) {
     vm.buy(Coin.OneHundred, DrinkType.Tea)
   }
+
+  expect(vm.buy(Coin.OneHundred, DrinkType.Coke)).toBeNull()
+  expect(vm.buy(Coin.OneHundred, DrinkType.DietCoke)).toBeNull()
   expect(vm.buy(Coin.OneHundred, DrinkType.Tea)).toBeNull()
 })
 
