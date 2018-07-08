@@ -6,11 +6,11 @@ import { DrinkStorage } from './storage'
 import { CoinMech } from './coin-mech'
 
 export class VendingMachine {
-  private stocks: DrinkStorage
+  private drinkStorage: DrinkStorage
   private coinMech: CoinMech
 
   constructor () {
-    this.stocks = new DrinkStorage()
+    this.drinkStorage = new DrinkStorage()
     this.coinMech = new CoinMech()
   }
 
@@ -21,19 +21,14 @@ export class VendingMachine {
    * @return 指定したジュース.在庫不足、釣り銭不足で変えなかった場合はnullが返される
    */
   buy (payment: Coin, kindOfDrink: DrinkType): Drink {
+
     // 100円と500円だけ受け取る
-    if ((payment !== Coin.OneHundred) && (payment !== Coin.FiveHundred)) {
+    if (!this.coinMech.isRecievable(payment)) {
       this.coinMech.putInCoin(payment)
       return null
     }
 
-    if ((kindOfDrink === DrinkType.Coke) && this.stocks.isEmpty(DrinkType.Coke)) {
-      this.coinMech.putInCoin(payment)
-      return null
-    } else if ((kindOfDrink === DrinkType.DietCoke) && this.stocks.isEmpty(DrinkType.DietCoke)) {
-      this.coinMech.putInCoin(payment)
-      return null
-    } else if ((kindOfDrink === DrinkType.Tea) && this.stocks.isEmpty(DrinkType.Tea)) {
+    if (this.drinkStorage.isEmpty(kindOfDrink)) {
       this.coinMech.putInCoin(payment)
       return null
     }
@@ -44,26 +39,8 @@ export class VendingMachine {
       return null
     }
 
-    if (payment === Coin.OneHundred) {
-      // 100円玉を釣り銭に使える
-      this.coinMech.putIntoCoinStock(payment)
-    } else if (payment === Coin.FiveHundred) {
-      // 400円のお釣り
-      // 100円玉を釣り銭に使える
-      this.coinMech.putIntoCoinStock(payment)
-
-      for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
-        this.coinMech.exchangePaymentForChange(Coin.OneHundred)
-      }
-    }
-
-    if (kindOfDrink === DrinkType.Coke) {
-      this.stocks.decrease(DrinkType.Coke)
-    } else if (kindOfDrink === DrinkType.DietCoke) {
-      this.stocks.decrease(DrinkType.DietCoke)
-    } else {
-      this.stocks.decrease(DrinkType.Tea)
-    }
+    this.coinMech.put(payment)
+    this.drinkStorage.decrease(kindOfDrink)
 
     return new Drink(kindOfDrink)
   }

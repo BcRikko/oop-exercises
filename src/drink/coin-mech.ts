@@ -10,12 +10,30 @@ export class CoinMech {
     this.charge = new Charge()
   }
 
+  isRecievable (payment: Coin): boolean {
+    return [Coin.OneHundred, Coin.FiveHundred].includes(payment)
+  }
+
+  put (payment: Coin): void {
+    this.putIntoCoinStock(payment)
+
+    if (this.needsChange(payment)) {
+      for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
+        this.exchangePaymentForChange(Coin.OneHundred)
+      }
+    }
+  }
+
   putInCoin (payment: Coin): void {
     this.charge.push(payment)
   }
 
   putIntoCoinStock (payment: Coin): void {
     this.coinStock.push(payment)
+  }
+
+  needsChange (payment: Coin): boolean {
+    return payment === Coin.FiveHundred
   }
 
   haveChange (payment: Coin): boolean {
