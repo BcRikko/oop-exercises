@@ -18,9 +18,7 @@ export class CoinMech {
     this.putIntoCoinStock(payment)
 
     if (this.needsChange(payment)) {
-      for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
-        this.exchangePaymentForChange(Coin.OneHundred)
-      }
+      this.exchangeForOneHundred(payment)
     }
   }
 
@@ -38,6 +36,12 @@ export class CoinMech {
 
   haveChange (payment: Coin): boolean {
     return this.coinStock.haveChange(payment)
+  }
+
+  exchangeForOneHundred (payment: Coin): void {
+    for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
+      this.exchangeForOneHundred(Coin.OneHundred)
+    }
   }
 
   exchangePaymentForChange (payment: Coin): void {
