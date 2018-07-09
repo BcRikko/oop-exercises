@@ -1,5 +1,5 @@
 import { DrinkStorage } from './storage'
-import { DrinkType } from './type'
+import { DrinkType } from '../drink'
 
 test('在庫がなくなったらisEmptyがtrueを返すこと', () => {
   const storage = new DrinkStorage()

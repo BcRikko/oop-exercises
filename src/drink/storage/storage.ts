@@ -1,5 +1,5 @@
 import { Stock } from './stock'
-import { DrinkType } from './type'
+import { DrinkType } from '../drink'
 
 export class DrinkStorage {
   private stocks: Map<DrinkType, Stock>

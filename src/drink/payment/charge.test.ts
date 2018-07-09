@@ -1,5 +1,4 @@
-import { Charge } from './charge'
-import { Coin } from '../type'
+import { Charge , Coin } from '.'
 
 test('釣り銭を硬貨別で取得できること', () => {
   const charge = new Charge()

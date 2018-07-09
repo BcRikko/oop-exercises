@@ -1,4 +1,4 @@
-import { DrinkType } from './type'
+import { DrinkType } from '.'
 
 export class Drink {
   private kind: DrinkType

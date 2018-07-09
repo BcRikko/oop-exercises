@@ -1,5 +1,4 @@
-import { CoinMech } from './coin-mech'
-import { Coin } from './type'
+import { CoinMech, Coin } from '.'
 
 test('対象のコイン以外は投入不可になること', () => {
   const cm = new CoinMech()

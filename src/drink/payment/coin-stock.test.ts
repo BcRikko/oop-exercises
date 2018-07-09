@@ -1,5 +1,4 @@
-import { CoinStock } from './coin-stock'
-import { Coin } from '../type'
+import { CoinStock, Coin } from '.'
 
 test('硬貨の初期在庫を設定できること', () => {
   const stock = new CoinStock()

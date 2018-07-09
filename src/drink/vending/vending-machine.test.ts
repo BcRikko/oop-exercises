@@ -1,5 +1,6 @@
 import { VendingMachine } from './vending-machine'
-import { Coin, DrinkType } from './type'
+import { Coin } from '../payment'
+import { DrinkType } from '../drink'
 
 test('100円玉、500円玉以外では購入できず、そのままお釣りとして返ってくること', () => {
   const vm = new VendingMachine()

@@ -1,9 +1,6 @@
-import { Drink } from './drink'
-import { Stock } from './stock'
-import { Coin, DrinkType } from './type'
-import { CoinStock, Charge } from './collection'
-import { DrinkStorage } from './storage'
-import { CoinMech } from './coin-mech'
+import { Drink, DrinkType } from '../drink'
+import { DrinkStorage } from '../storage'
+import { CoinMech, Coin } from '../payment'
 
 export class VendingMachine {
   private drinkStorage: DrinkStorage

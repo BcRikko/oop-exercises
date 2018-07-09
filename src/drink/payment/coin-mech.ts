@@ -1,5 +1,7 @@
-import { CoinStock, Charge } from './collection'
-import { Coin } from './type'
+import { Coin, Charge, CoinStock } from '.'
+
+// import { CoinStock, Charge } from './collection'
+// import { Coin } from './type'
 
 export class CoinMech {
   private coinStock: CoinStock
@@ -40,7 +42,7 @@ export class CoinMech {
 
   exchangeForOneHundred (payment: Coin): void {
     for (let i = 0; i < (payment - Coin.OneHundred) / Coin.OneHundred; i++) {
-      this.exchangeForOneHundred(Coin.OneHundred)
+      this.exchangePaymentForChange(Coin.OneHundred)
     }
   }
 

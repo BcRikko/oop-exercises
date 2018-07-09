@@ -1,7 +1,7 @@
-import { Coin } from './coin'
 import { DrinkType } from './drink-type'
+import { Drink } from './drink'
 
 export {
-  Coin,
-  DrinkType
+  DrinkType,
+  Drink
 }

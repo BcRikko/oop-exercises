@@ -1,4 +1,4 @@
-import { Coin } from '../type'
+import { Coin } from '.'
 
 interface CoinOption {
   coin: Coin,

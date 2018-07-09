@@ -1,5 +1,4 @@
-import { Drink } from './drink'
-import { DrinkType } from './type'
+import { Drink, DrinkType } from '.'
 
 test('最初に指定したドリンクがCokeのときtrueになる', () => {
   const drink = new Drink(DrinkType.Coke)

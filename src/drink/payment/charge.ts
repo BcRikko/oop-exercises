@@ -1,4 +1,4 @@
-import { Coin } from '../type'
+import { Coin } from './coin'
 
 export class Charge {
   private charge: Coin[] = []
